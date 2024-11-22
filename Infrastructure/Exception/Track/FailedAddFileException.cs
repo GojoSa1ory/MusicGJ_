@@ -1,0 +1,1 @@
+class FailedAddFileException(String message = "Failed to add new file"): Exception(message);

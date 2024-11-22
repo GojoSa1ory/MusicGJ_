@@ -1,0 +1,1 @@
+class FileNotFoundException(String message = "File not found"): Exception(message);
