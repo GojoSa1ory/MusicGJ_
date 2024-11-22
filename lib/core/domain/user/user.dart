@@ -1,0 +1,1 @@
+export 'package:music_g/core/domain/user/model/user_model.dart';
