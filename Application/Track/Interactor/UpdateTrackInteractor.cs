@@ -4,19 +4,19 @@ using MusicG.Domain.Track.Models;
 public class UpdateTrackInteractor {
     private readonly TrackApplicationMapper _mapper;
     private readonly UpdateTrackUsecase _usecase;
-    private readonly FileUploadIntrerface _fileUploadUtil;
+    private readonly IFileUploadIntrerface _fileUploadUtil;
 
     public UpdateTrackInteractor(
         TrackApplicationMapper mapper,
         UpdateTrackUsecase usecase,
-        FileUploadIntrerface fileUploadUtil
+        IFileUploadIntrerface fileUploadUtil
     ) {
         _mapper = mapper;
         _usecase = usecase;
         _fileUploadUtil = fileUploadUtil;
     }
 
-    public async Task<ServiceResponse<ResponseTrackDto>> Invoke(int id, RequestUpdateTrackDTO track) {
+    public async Task<ServiceResponse<ResponseTrackDto>> Invoke(int id, RequestUpdateTrackDto track) {
 
         ServiceResponse<ResponseTrackDto> resp = new();
         try
@@ -35,7 +35,7 @@ public class UpdateTrackInteractor {
         catch (System.Exception ex)
         {
             resp.Data = null;
-            resp.err = ex.Message;
+            resp.Err = ex.Message;
         }
 
         return resp;

@@ -5,9 +5,9 @@ public class AddTrackInteractor {
     
     private readonly TrackApplicationMapper _mapper;
     private readonly AddTrackUsecase _usecase;
-    private readonly FileUploadIntrerface _fileUploadUtil;
+    private readonly IFileUploadIntrerface _fileUploadUtil;
 
-    public AddTrackInteractor(AddTrackUsecase usecase, TrackApplicationMapper mapper, FileUploadIntrerface fileUploadUtil)
+    public AddTrackInteractor(AddTrackUsecase usecase, TrackApplicationMapper mapper, IFileUploadIntrerface fileUploadUtil)
     {
         _usecase = usecase;
         _mapper = mapper;
@@ -34,7 +34,7 @@ public class AddTrackInteractor {
         catch (System.Exception ex)
         {
             resp.Data = null;
-            resp.err = ex.Message;
+            resp.Err = ex.Message;
         }
 
         return resp;

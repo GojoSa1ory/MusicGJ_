@@ -1,6 +1,6 @@
 using MusicG.Domain.Track.Models;
 
-public interface TrackRepository {
+public interface ITrackRepository {
     Task<TrackModel> AddTrack(TrackModelWithoutUser track);
     Task<List<TrackModel>> GetTracks();
     Task<TrackModel> GetTrackById(int id);

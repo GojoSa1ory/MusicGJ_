@@ -4,9 +4,9 @@ namespace MusicG.Domain.Track.Usecase;
 
 public class GetTracksUsecase
 {
-    private readonly TrackRepository _rep;
+    private readonly ITrackRepository _rep;
 
-    public GetTracksUsecase(TrackRepository rep)
+    public GetTracksUsecase(ITrackRepository rep)
     {
         _rep = rep;
     }

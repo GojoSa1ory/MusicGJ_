@@ -2,9 +2,9 @@ using MusicG.Domain.Track.Models;
 
 public class UpdateTrackUsecase {
 
-    private readonly TrackRepository _rep;
+    private readonly ITrackRepository _rep;
 
-    public UpdateTrackUsecase(TrackRepository rep)
+    public UpdateTrackUsecase(ITrackRepository rep)
     {
         _rep = rep;
     }

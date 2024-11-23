@@ -20,7 +20,7 @@ public class AddTrackController: ControllerBase {
         
         var response = await _addInteractor.Invoke(track);
 
-        if(!response.IsSuccess) return BadRequest(response.err);
+        if(!response.IsSuccess) return BadRequest(response.Err);
 
         return Ok(response.Data);
     }

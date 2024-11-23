@@ -8,7 +8,7 @@ using MusicG.Infrastructure.Exception.User;
 using MusicG.Infrastructure.Mapper;
 namespace MusicG.Infrastructure.Repository;
 
-public class AuthRepositoryImpl: AuthRepository
+public class AuthRepositoryImpl: IAuthRepository
 {
     private readonly AppDatabaseContext _context;
     private readonly InfAuthMapper _mapper;
@@ -27,14 +27,14 @@ public class AuthRepositoryImpl: AuthRepository
 
         try
         {
-            var existedUser = _context.Users.FirstOrDefault(u => u.email == reqRegisterAuth.Email);
+            var existedUser = _context.Users.FirstOrDefault(u => u.Email == reqRegisterAuth.Email);
 
             if (existedUser != null)
                 throw new UserAlreadyExistException();
 
             var newUser = _mapper.MapToEntity(reqRegisterAuth);
 
-            newUser.password = BCrypt.Net.BCrypt.HashPassword(newUser.password);
+            newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
 
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
@@ -43,7 +43,7 @@ public class AuthRepositoryImpl: AuthRepository
         }
         catch (System.Exception e)
         {
-            response.err = e.Message;
+            response.Err = e.Message;
         }
         
         return response;
@@ -55,19 +55,19 @@ public class AuthRepositoryImpl: AuthRepository
 
         try
         {
-            var user = _context.Users.FirstOrDefault(u => u.username == requestLoginAuthDto.Username);
+            var user = _context.Users.FirstOrDefault(u => u.Username == requestLoginAuthDto.Username);
 
             if (user is null) 
                 throw new UserNotFoundException();
 
-            if (!BCrypt.Net.BCrypt.Verify(requestLoginAuthDto.Password, user.password))
+            if (!BCrypt.Net.BCrypt.Verify(requestLoginAuthDto.Password, user.Password))
                 throw new LoginFailedException();
 
             res.Data = _mapper.MapToDomain(user);
         }
         catch (System.Exception e)
         {
-            res.err = e.Message;
+            res.Err = e.Message;
         }
         
         return res;
@@ -80,8 +80,8 @@ public class AuthRepositoryImpl: AuthRepository
         if (userFromDb is null) throw new System.Exception("User not found");
 
         AuthModel authModel = new();
-        authModel.Email = userFromDb.email;
-        authModel.Username = userFromDb.username;
+        authModel.Email = userFromDb.Email;
+        authModel.Username = userFromDb.Username;
         authModel.Id = userFromDb.Id;
 
         return authModel;

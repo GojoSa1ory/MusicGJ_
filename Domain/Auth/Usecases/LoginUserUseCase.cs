@@ -5,14 +5,14 @@ namespace MusicG.Domain.Auth.Usecases;
 
 public class LoginUserUseCase
 {
-    private readonly AuthRepository _repository;
+    private readonly IAuthRepository _repository;
 
-    public LoginUserUseCase(AuthRepository repository)
+    public LoginUserUseCase(IAuthRepository repository)
     {
         _repository = repository;
     }
 
-    public Task<ServiceResponse<AuthModel>> invoke(AuthModel authModel)
+    public Task<ServiceResponse<AuthModel>> Invoke(AuthModel authModel)
     {
         return _repository.LoginUser(authModel);
     }

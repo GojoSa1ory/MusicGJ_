@@ -2,9 +2,9 @@ namespace MusicG.Domain.Track.Usecase;
 
 public class DeleteTrackUsecase
 {
-    private TrackRepository _trackRepository;
+    private ITrackRepository _trackRepository;
 
-    public DeleteTrackUsecase(TrackRepository rep)
+    public DeleteTrackUsecase(ITrackRepository rep)
     {
         _trackRepository = rep;
     }

@@ -4,13 +4,13 @@ using MusicG.Infrastructure.database.entity;
 
 namespace MusicG.Infrastructure.Mapper;
 
-public interface InfGenreMapper
+public interface INfGenreMapper
 {
-    GenreEntity mapToEntity(GenreModel genre);
-    GenreModel mapToDomain (GenreEntity genre);
+    GenreEntity MapToEntity(GenreModel genre);
+    GenreModel MapToDomain (GenreEntity genre);
 }
 
-public class InfGenreMapperImpl: InfGenreMapper
+public class InfGenreMapperImpl: INfGenreMapper
 {
     private readonly IMapper _mapper;
 
@@ -19,12 +19,12 @@ public class InfGenreMapperImpl: InfGenreMapper
         _mapper = mapper;
     }
 
-    public GenreEntity mapToEntity(GenreModel genre)
+    public GenreEntity MapToEntity(GenreModel genre)
     {
         return _mapper.Map<GenreEntity>(genre);
     }
 
-    public GenreModel mapToDomain(GenreEntity genre)
+    public GenreModel MapToDomain(GenreEntity genre)
     {
         return _mapper.Map<GenreModel>(genre);
     }

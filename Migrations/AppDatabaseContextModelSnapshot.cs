@@ -38,6 +38,35 @@ namespace MusicG.Migrations
                     b.ToTable("Genre");
                 });
 
+            modelBuilder.Entity("MusicG.Infrastructure.database.entity.PlaylistEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("image");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("name");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Playlist");
+                });
+
             modelBuilder.Entity("MusicG.Infrastructure.database.entity.TrackEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -84,21 +113,47 @@ namespace MusicG.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("email")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("password")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("username")
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users_table");
+                });
+
+            modelBuilder.Entity("PlaylistEntityTrackEntity", b =>
+                {
+                    b.Property<int>("PlaylistId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TracksId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlaylistId", "TracksId");
+
+                    b.HasIndex("TracksId");
+
+                    b.ToTable("PlaylistEntityTrackEntity");
+                });
+
+            modelBuilder.Entity("MusicG.Infrastructure.database.entity.PlaylistEntity", b =>
+                {
+                    b.HasOne("MusicG.Infrastructure.database.entity.UserEntity", "User")
+                        .WithMany("Playlists")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MusicG.Infrastructure.database.entity.TrackEntity", b =>
@@ -110,7 +165,7 @@ namespace MusicG.Migrations
                         .IsRequired();
 
                     b.HasOne("MusicG.Infrastructure.database.entity.UserEntity", "User")
-                        .WithMany("tracks")
+                        .WithMany("Tracks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -120,9 +175,26 @@ namespace MusicG.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PlaylistEntityTrackEntity", b =>
+                {
+                    b.HasOne("MusicG.Infrastructure.database.entity.PlaylistEntity", null)
+                        .WithMany()
+                        .HasForeignKey("PlaylistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MusicG.Infrastructure.database.entity.TrackEntity", null)
+                        .WithMany()
+                        .HasForeignKey("TracksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MusicG.Infrastructure.database.entity.UserEntity", b =>
                 {
-                    b.Navigation("tracks");
+                    b.Navigation("Playlists");
+
+                    b.Navigation("Tracks");
                 });
 #pragma warning restore 612, 618
         }

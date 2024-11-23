@@ -4,14 +4,14 @@ namespace MusicG.Domain.User.Usecases;
 
 public class GetUserByIdUseCase
 {
-    private readonly UserRepository _repository;
+    private readonly IUserRepository _repository;
 
-    public GetUserByIdUseCase(UserRepository repository)
+    public GetUserByIdUseCase(IUserRepository repository)
     {
         _repository = repository;
     }
 
-    public Task<ServiceResponse<UserModel>> invoke(int id)
+    public Task<ServiceResponse<UserModel>> Invoke(int id)
     {
         return _repository.GetUserById(id);
     }

@@ -13,10 +13,10 @@ public class UpdateTrackController: ControllerBase {
     }
 
     [HttpPatch("/api/track/update/{id}")]
-    public async Task<ActionResult<ServiceResponse<ResponseTrackDto>>> AddTrack([FromForm] RequestUpdateTrackDTO track, int id) {
+    public async Task<ActionResult<ServiceResponse<ResponseTrackDto>>> AddTrack([FromForm] RequestUpdateTrackDto track, int id) {
         var response = await _updateInteractor.Invoke(id: id, track: track);
 
-        if(!response.IsSuccess) return BadRequest(response.err);
+        if(!response.IsSuccess) return BadRequest(response.Err);
 
         return Ok(response.Data);
     }

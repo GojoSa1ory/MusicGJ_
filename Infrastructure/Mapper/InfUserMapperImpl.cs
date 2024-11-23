@@ -4,13 +4,13 @@ using MusicG.Infrastructure.database.entity;
 
 namespace MusicG.Infrastructure.Mapper;
 
-public interface InfUserMapper
+public interface INfUserMapper
 {
-    UserModel mapToDomain(UserEntity user);
-    UserEntity mapToEntity(UserModel user);
+    UserModel MapToDomain(UserEntity user);
+    UserEntity MapToEntity(UserModel user);
 }
 
-public class InfUserMapperImpl: InfUserMapper
+public class InfUserMapperImpl: INfUserMapper
 {
 
     private readonly IMapper _mapper;
@@ -21,12 +21,12 @@ public class InfUserMapperImpl: InfUserMapper
     }
 
 
-    public UserModel mapToDomain(UserEntity user)
+    public UserModel MapToDomain(UserEntity user)
     {
         return _mapper.Map<UserModel>(user);
     }
 
-    public UserEntity mapToEntity(UserModel user)
+    public UserEntity MapToEntity(UserModel user)
     {
         return _mapper.Map<UserEntity>(user);
     }

@@ -7,7 +7,7 @@ using MusicG.Infrastructure.Exception.User;
 
 namespace MusicG.Infrastructure.Repository;
 
-public class UserRepositoryImpl: UserRepository
+public class UserRepositoryImpl: IUserRepository
 {
     private readonly AppDatabaseContext _dao;
     private readonly IMapper _mapper;
@@ -18,13 +18,13 @@ public class UserRepositoryImpl: UserRepository
         _mapper = mapper;
     }
 
-    public async Task<ServiceResponse<UserModel>> GetUserByUsername(string username)
+    public Task<ServiceResponse<UserModel>> GetUserByUsername(string username)
     {
         ServiceResponse<UserModel> response = new();
 
         try
         {
-            var user = _dao.Users.FirstOrDefault(u => u.username == username);
+            var user = _dao.Users.FirstOrDefault(u => u.Username == username);
 
             if (user is null) throw new UserNotFoundException();
             
@@ -33,10 +33,10 @@ public class UserRepositoryImpl: UserRepository
         }
         catch (System.Exception e)
         {
-            response.err = e.Message;
+            response.Err = e.Message;
         }
         
-        return response;
+        return Task.FromResult(response);
     }
 
     public async Task<ServiceResponse<UserModel>> GetUserById(int id)
@@ -54,7 +54,7 @@ public class UserRepositoryImpl: UserRepository
         }
         catch (System.Exception e)
         {
-            response.err = e.Message;
+            response.Err = e.Message;
         }
         
 

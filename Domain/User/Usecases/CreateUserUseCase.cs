@@ -5,14 +5,14 @@ namespace MusicG.Domain.User.Usecases;
 public class CreateUserUseCase
 {
 
-    private static UserRepository _repository;
+    private static IUserRepository _repository;
 
-    public CreateUserUseCase(UserRepository rep)
+    public CreateUserUseCase(IUserRepository rep)
     {
         _repository = rep;
     }
     
-    public static Task<ServiceResponse<bool>> invoke(UserModel newUser)
+    public static Task<ServiceResponse<bool>> Invoke(UserModel newUser)
     {
         return _repository.CreateUser(newUser);
     }

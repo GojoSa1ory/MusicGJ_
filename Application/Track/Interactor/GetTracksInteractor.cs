@@ -26,7 +26,7 @@ public class GetTracksInteractor
         }
         catch (Exception e)
         {
-            resp.err = e.Message;
+            resp.Err = e.Message;
         }
 
         return resp;

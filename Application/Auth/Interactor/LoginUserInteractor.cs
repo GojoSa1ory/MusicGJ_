@@ -11,13 +11,13 @@ public class LoginUserInteractor
     private readonly LoginUserUseCase _loginUserUseCase;
     private readonly ApplicationAuthMapper _mapper;
     private readonly IConfiguration _configuration;
-    private readonly JwtTokenGenerate _jwtTokenGenerate;
+    private readonly IJwtTokenGenerate _jwtTokenGenerate;
 
     public LoginUserInteractor(
         LoginUserUseCase loginUserUseCase,
         ApplicationAuthMapper mapper,
         IConfiguration configuration,
-        JwtTokenGenerate jwtTokenGenerate
+        IJwtTokenGenerate jwtTokenGenerate
     ) {
         _loginUserUseCase = loginUserUseCase;
         _mapper = mapper;
@@ -25,14 +25,14 @@ public class LoginUserInteractor
         _jwtTokenGenerate = jwtTokenGenerate;
     }
     
-    public async Task<ServiceResponse<ResponseAuthDto>> invoke(RequestLoginAuthDto reg)
+    public async Task<ServiceResponse<ResponseAuthDto>> Invoke(RequestLoginAuthDto reg)
     {
         ServiceResponse<ResponseAuthDto> res = new();
 
         try
         {
             var authReqModel = _mapper.MapLoginRequestToDomain(reg);
-            var autResponseLogin =  await _loginUserUseCase.invoke(authReqModel);
+            var autResponseLogin =  await _loginUserUseCase.Invoke(authReqModel);
 
             if (autResponseLogin.Data == null) throw new Exception("Login failed");
 
@@ -41,7 +41,7 @@ public class LoginUserInteractor
         }
         catch (Exception ex)
         {
-            res.err = ex.Message;
+            res.Err = ex.Message;
         }
         
         return res;

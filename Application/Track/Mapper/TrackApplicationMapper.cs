@@ -13,7 +13,7 @@ public class TrackApplicationMapper {
         return _mapper.Map<TrackModelWithoutUser>(track);
     }
 
-    public TrackModel MapToDomainFromUpdateRequest(RequestUpdateTrackDTO track) {
+    public TrackModel MapToDomainFromUpdateRequest(RequestUpdateTrackDto track) {
         return _mapper.Map<TrackModel>(track);
     }
 

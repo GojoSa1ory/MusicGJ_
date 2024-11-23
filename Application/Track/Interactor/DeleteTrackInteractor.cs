@@ -24,7 +24,7 @@ public class DeleteTrackInteractor
         catch (Exception e)
         {
             resp.Data = null;
-            resp.err = e.Message;
+            resp.Err = e.Message;
         }
 
         return resp;

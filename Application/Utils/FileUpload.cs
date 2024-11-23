@@ -1,8 +1,8 @@
-public interface FileUploadIntrerface {
+public interface IFileUploadIntrerface {
     Task<string> UploadFile(string fileType, IFormFile file);
 }
 
-public class FileUploadUtil() : FileUploadIntrerface
+public class FileUploadUtil() : IFileUploadIntrerface
 {
     public async Task<string> UploadFile(string fileType, IFormFile file)
     {

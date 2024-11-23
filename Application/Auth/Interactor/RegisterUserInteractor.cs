@@ -11,13 +11,13 @@ public class RegisterUserInteractor
     private RegisterUserUseCase _registerUserUseCase;
     private ApplicationAuthMapper _mapper;
     private IConfiguration _configuration;
-    private readonly JwtTokenGenerate _jwtTokenGenerate;
+    private readonly IJwtTokenGenerate _jwtTokenGenerate;
     
     public RegisterUserInteractor (
         RegisterUserUseCase registerUserUseCase, 
         ApplicationAuthMapper mapper, 
         IConfiguration configuration,
-        JwtTokenGenerate jwtTokenGenerate
+        IJwtTokenGenerate jwtTokenGenerate
     ) {
         _registerUserUseCase = registerUserUseCase;
         _mapper = mapper;
@@ -25,7 +25,7 @@ public class RegisterUserInteractor
         _jwtTokenGenerate = jwtTokenGenerate;
     }
 
-    public async Task<ServiceResponse<ResponseAuthDto>> invoke(RequestRegisterAuthDto reg)
+    public async Task<ServiceResponse<ResponseAuthDto>> Invoke(RequestRegisterAuthDto reg)
     {
         ServiceResponse<ResponseAuthDto> res = new();
         
@@ -33,11 +33,11 @@ public class RegisterUserInteractor
         {
             var requestAuthModel = _mapper.MapRegisterRequestToDomain(reg);
 
-            var responseAuthModel = await _registerUserUseCase.invoke(requestAuthModel);
+            var responseAuthModel = await _registerUserUseCase.Invoke(requestAuthModel);
 
             if (!responseAuthModel.IsSuccess)
             {
-                res.err = responseAuthModel.err;
+                res.Err = responseAuthModel.Err;
                 return res;
             }
             
@@ -47,7 +47,7 @@ public class RegisterUserInteractor
         catch (Exception e)
         {
             Console.WriteLine(e);
-            res.err = e.Message;
+            res.Err = e.Message;
             throw;
         }
         

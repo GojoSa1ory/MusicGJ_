@@ -22,7 +22,7 @@ public class GetTracksController: ControllerBase
     {
         var res = await _tracksInteractor.Invoke();
 
-        if (!res.IsSuccess) return BadRequest(res.err);
+        if (!res.IsSuccess) return BadRequest(res.Err);
 
         return Ok(res.Data);
     }

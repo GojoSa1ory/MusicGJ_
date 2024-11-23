@@ -19,7 +19,7 @@ public class DeleteTrackController: ControllerBase
     public async Task<ActionResult<ServiceResponse<String>>> DeleteTrack(int id)
     {
         var res = await _deleteTrackInteractor.Invoke(id);
-        if (!res.IsSuccess) return BadRequest(res.err);
+        if (!res.IsSuccess) return BadRequest(res.Err);
 
         return Ok(res.Data);
     }

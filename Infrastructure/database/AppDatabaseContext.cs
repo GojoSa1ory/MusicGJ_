@@ -8,5 +8,6 @@ public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : 
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<TrackEntity> Tracks { get; set; }
     public DbSet<GenreEntity> Genres { get; set; }
+    public DbSet<PlaylistEntity> Playlist { get; set; }
     
 }

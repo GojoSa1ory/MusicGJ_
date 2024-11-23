@@ -1,9 +1,9 @@
 using MusicG.Domain.Track.Models;
 
 public class AddTrackUsecase {
-    private readonly TrackRepository _rep;
+    private readonly ITrackRepository _rep;
 
-    public AddTrackUsecase(TrackRepository track) {
+    public AddTrackUsecase(ITrackRepository track) {
         _rep = track;
     }
 

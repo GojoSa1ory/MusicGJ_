@@ -16,4 +16,6 @@ public class TrackEntity {
     public required UserEntity User { get; set; }
 
     public required GenreEntity Genre { get; set; }
+    
+    public List<PlaylistEntity>? Playlist { get; set; }
 }

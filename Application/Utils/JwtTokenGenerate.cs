@@ -6,12 +6,12 @@ using MusicG.Domain.Auth.Models;
 
 namespace MusicG.Application.Utils;
 
-public interface JwtTokenGenerate
+public interface IJwtTokenGenerate
 {
     string GenerateToken(AuthModel user, IConfiguration configuration);
 }
 
-public class JwtTokenGenerateImpl: JwtTokenGenerate
+public class JwtTokenGenerateImpl: IJwtTokenGenerate
 {
     public string GenerateToken(AuthModel user, IConfiguration configuration)
     {

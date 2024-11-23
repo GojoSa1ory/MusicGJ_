@@ -22,7 +22,7 @@ public class GetTrackByIdInteractor {
         }
         catch (Exception ex)
         {
-            resp.err = ex.Message;
+            resp.Err = ex.Message;
         }
         
         return resp;
