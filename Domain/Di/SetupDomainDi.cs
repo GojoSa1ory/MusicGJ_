@@ -1,6 +1,7 @@
 using MusicG.Domain.Auth.Usecases;
 using MusicG.Domain.Playlist.Usecase;
 using MusicG.Domain.Track.Usecase;
+using MusicG.Domain.User.Usecases;
 
 static class SetupDomainDi {
     public static void SetupDi(WebApplicationBuilder builder) {
@@ -8,11 +9,18 @@ static class SetupDomainDi {
         builder.Services.AddScoped<RegisterUserUseCase>();
         builder.Services.AddScoped<LoginUserUseCase>();
 
+        builder.Services.AddScoped<DeleteUserUsecase>();
+        builder.Services.AddScoped<UpdateUserUsecase>();
+        builder.Services.AddScoped<GetUserByUsernameUseCase>();
+        builder.Services.AddScoped<GetUserByIdUseCase>();
+        
+        
         builder.Services.AddScoped<AddTrackUsecase>();
         builder.Services.AddScoped<GetTrackByIdUsecase>();
         builder.Services.AddScoped<UpdateTrackUsecase>();
         builder.Services.AddScoped<DeleteTrackUsecase>();
         builder.Services.AddScoped<GetTracksUsecase>();
+        
         
         builder.Services.AddScoped<CreatePlaylistUsecase>();
         builder.Services.AddScoped<GetUserPlaylistUseCase>();

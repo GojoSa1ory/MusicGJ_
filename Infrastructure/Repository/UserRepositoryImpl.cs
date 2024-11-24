@@ -7,62 +7,62 @@ using MusicG.Infrastructure.Exception.User;
 
 namespace MusicG.Infrastructure.Repository;
 
-public class UserRepositoryImpl: IUserRepository
+public class UserRepositoryImpl : IUserRepository
 {
     private readonly AppDatabaseContext _dao;
     private readonly IMapper _mapper;
-    
+
     public UserRepositoryImpl(AppDatabaseContext dao, IMapper mapper)
     {
         _dao = dao;
         _mapper = mapper;
     }
 
-    public Task<ServiceResponse<UserModel>> GetUserByUsername(string username)
+    public Task<UserModel> GetUserByUsername(string username)
     {
-        ServiceResponse<UserModel> response = new();
+        var user = _dao.Users.FirstOrDefault(u => u.Username.ToLower().Contains(username.ToLower()));
 
-        try
-        {
-            var user = _dao.Users.FirstOrDefault(u => u.Username == username);
+        if (user is null) throw new UserNotFoundException();
 
-            if (user is null) throw new UserNotFoundException();
-            
-            response.Data = _mapper.Map<UserModel>(user);
-
-        }
-        catch (System.Exception e)
-        {
-            response.Err = e.Message;
-        }
-        
-        return Task.FromResult(response);
+        return Task.FromResult(_mapper.Map<UserModel>(user));
     }
 
-    public async Task<ServiceResponse<UserModel>> GetUserById(int id)
+    public Task<UserModel> GetUserById(int id)
     {
-        ServiceResponse<UserModel> response = new();
+        var user = _dao.Users.FirstOrDefault(u => u.Id == id);
 
-        try
-        {
-            var user = _dao.Users.FirstOrDefault(u => u.Id == id);
-
-            if (user is null) throw new UserNotFoundException();
-            
-            response.Data = _mapper.Map<UserModel>(user);
-
-        }
-        catch (System.Exception e)
-        {
-            response.Err = e.Message;
-        }
+        if (user is null) throw new UserNotFoundException();
         
-
-        return response;
+        return Task.FromResult(_mapper.Map<UserModel>(user));
     }
 
-    public Task<ServiceResponse<bool>> CreateUser(UserModel newUser)
+    public async Task<bool> UpdateUser(UserToUpdateModel user, int userId)
     {
-        throw new NotImplementedException();
+        var userFromBase = _dao.Users.FirstOrDefault(u => u.Id == userId);
+        if (userFromBase is null) throw new UserNotFoundException();
+
+        userFromBase.Username = (user.Username == userFromBase.Username ? userFromBase.Username : user.Username) ??
+                                throw new InvalidOperationException();
+        userFromBase.Email = (user.Email == userFromBase.Email ? userFromBase.Email : user.Email) ??
+                             throw new InvalidOperationException();
+        if (user.Password?.Length >= 8 && !BCrypt.Net.BCrypt.Verify(user.Password, userFromBase.Password))
+        {
+            userFromBase.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+        }
+
+        await _dao.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> DeleteUser(int id)
+    {
+        var userFromBase = _dao.Users.FirstOrDefault(u => u.Id == id);
+        if (userFromBase is null) throw new UserNotFoundException();
+
+        _dao.Users.Remove(userFromBase);
+        await _dao.SaveChangesAsync();
+
+        return true;
     }
 }

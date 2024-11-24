@@ -11,7 +11,7 @@ public class GetUserByIdUseCase
         _repository = repository;
     }
 
-    public Task<ServiceResponse<UserModel>> Invoke(int id)
+    public Task<UserModel> Invoke(int id)
     {
         return _repository.GetUserById(id);
     }

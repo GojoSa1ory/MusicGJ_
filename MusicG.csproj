@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Application\Auth\" />
-    <Folder Include="Application\User\Interactor\" />
     <Folder Include="Domain\Genre\Repositories\" />
     <Folder Include="Domain\Genre\Usecases\" />
   </ItemGroup>

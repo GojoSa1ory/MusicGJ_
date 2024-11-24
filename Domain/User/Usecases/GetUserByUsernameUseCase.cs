@@ -2,12 +2,7 @@ using MusicG.Domain.User.Repository;
 
 namespace MusicG.Domain.User.Usecases;
 
-public interface IUserUseCaseInterface<T>
-{
-    Task<ServiceResponse<T>> Invoke(string username);
-}
-
-public class GetUserByUsernameUseCase: IUserUseCaseInterface<UserModel>
+public class GetUserByUsernameUseCase
 {
     private readonly IUserRepository _repository;
 
@@ -17,8 +12,8 @@ public class GetUserByUsernameUseCase: IUserUseCaseInterface<UserModel>
     }
 
 
-    public async Task<ServiceResponse<UserModel>> Invoke(string username)
+    public Task<UserModel> Invoke(string username)
     {
-        return await _repository.GetUserByUsername(username);
+        return _repository.GetUserByUsername(username);
     }
 }

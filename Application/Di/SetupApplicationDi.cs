@@ -2,6 +2,7 @@ using MusicG.Application.Auth.Interactor;
 using MusicG.Application.Auth.Mapper;
 using MusicG.Application.Playlist.Interactor;
 using MusicG.Application.Track.Interactor;
+using MusicG.Application.User.Interactor;
 using MusicG.Application.Utils;
 using MusicG.Domain.Playlist.Usecase;
 using MusicG.Domain.Track.Usecase;
@@ -16,7 +17,14 @@ static class SetupApplicationDi
 
         builder.Services.AddScoped<LoginUserInteractor>();
         builder.Services.AddScoped<RegisterUserInteractor>();
-
+        
+        
+        builder.Services.AddScoped<DeleteUserInteractor>();
+        builder.Services.AddScoped<GetUserByUsernameInteractor>();
+        builder.Services.AddScoped<GetUserByIdInteractor>();
+        builder.Services.AddScoped<UpdateUserInteractor>();
+        
+        
         builder.Services.AddScoped<AddTrackInteractor>();
         builder.Services.AddScoped<GetTrackByIdInteractor>();
         builder.Services.AddScoped<UpdateTrackInteractor>();
@@ -25,6 +33,7 @@ static class SetupApplicationDi
         
         builder.Services.AddScoped<IFileUploadIntrerface, FileUploadUtil>();
         builder.Services.AddScoped<IJwtTokenGenerate, JwtTokenGenerateImpl>();
+        
         
         builder.Services.AddScoped<CreatePlaylistInteractor>();
         builder.Services.AddScoped<GetUserPlaylistInteractor>();

@@ -2,7 +2,8 @@ namespace MusicG.Domain.User.Repository;
 
 public interface IUserRepository
 {
-    Task<ServiceResponse<UserModel>> GetUserByUsername(string username);
-    Task<ServiceResponse<UserModel>> GetUserById(int id);
-    Task<ServiceResponse<bool>> CreateUser(UserModel newUser);
+    Task<UserModel> GetUserByUsername(string username);
+    Task<UserModel> GetUserById(int id);
+    Task<bool> UpdateUser(UserToUpdateModel user, int userId);
+    Task<bool> DeleteUser(int id);
 }

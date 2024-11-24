@@ -19,6 +19,8 @@ public class MapperCfg: Profile
         CreateMap<ResponseUserDto, UserModel>().ReverseMap();
         CreateMap<UserModel, UserEntity>().ReverseMap();
         CreateMap<ResponseUserDto, UserEntity>().ReverseMap();
+        CreateMap<ResponseUserDto, UserToUpdateModel>().ReverseMap();
+        CreateMap<RequestUpdateUserDto, UserToUpdateModel>().ReverseMap();
         
         CreateMap<RequestRegisterAuthDto, AuthModel>().ReverseMap();
         CreateMap<RequestLoginAuthDto, AuthModel>().ReverseMap();
