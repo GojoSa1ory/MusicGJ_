@@ -18,10 +18,10 @@ public class GetPlaylistByIdController: ControllerBase
 
 
     [HttpGet("/api/playlist/{id}")]
-    public async Task<ActionResult<ServiceResponse<ResponsePlaylistDto>>> Invoke(int id)
+    public async Task<ActionResult<ServiceResponse<ResponsePlaylistDto, string>>> Invoke(int id)
     {
         var res = await _playlistByIdInteractor.Invoke(id);
-        if (!res.IsSuccess) return BadRequest(res.Err);
-        return Ok(res.Data);
+        
+        return res.IsSuccess ? Ok(res.DataOrNull) : BadRequest(res.ErrorOrNull);
     }
 }

@@ -16,20 +16,16 @@ public class FindPlaylistByNameInteractor
         _mapper = mapper;
     }
     
-    public async Task<ServiceResponse<List<ResponsePlaylistDto>>> Invoke (string name)
+    public async Task<ServiceResponse<List<ResponsePlaylistDto>, string>> Invoke (string name)
     {
-        ServiceResponse<List<ResponsePlaylistDto>> res = new();
-
         try
         {
             var req = await _playlistByNameUsecase.Invoke(name);
-            res.Data = req.Select(p => _mapper.Map<ResponsePlaylistDto>(p)).ToList();
+            return ServiceResponse<List<ResponsePlaylistDto>, string>.Success(req.Select(p => _mapper.Map<ResponsePlaylistDto>(p)).ToList());
         }
         catch (Exception e)
         {
-            res.Err = e.Message;
+            return ServiceResponse<List<ResponsePlaylistDto>, string>.Failure(e.Message);
         }
-        
-        return res;
     }
 }

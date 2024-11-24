@@ -25,25 +25,20 @@ public class LoginUserInteractor
         _jwtTokenGenerate = jwtTokenGenerate;
     }
     
-    public async Task<ServiceResponse<ResponseAuthDto>> Invoke(RequestLoginAuthDto reg)
+    public async Task<ServiceResponse<ResponseAuthDto, String>> Invoke(RequestLoginAuthDto reg)
     {
-        ServiceResponse<ResponseAuthDto> res = new();
-
         try
         {
             var authReqModel = _mapper.MapLoginRequestToDomain(reg);
             var autResponseLogin =  await _loginUserUseCase.Invoke(authReqModel);
 
-            if (autResponseLogin.Data == null) throw new Exception("Login failed");
-
-            string token = _jwtTokenGenerate.GenerateToken(autResponseLogin.Data, _configuration);
-            res.Data = _mapper.MapToResponse(autResponseLogin.Data, token);
+            string token = _jwtTokenGenerate.GenerateToken(autResponseLogin.DataOrNull, _configuration);
+            return ServiceResponse<ResponseAuthDto,String>.Success( _mapper.MapToResponse(autResponseLogin.DataOrNull, token));
         }
         catch (Exception ex)
         {
-            res.Err = ex.Message;
+            return ServiceResponse<ResponseAuthDto, string>.Failure(ex.Message);
         }
         
-        return res;
     }
 }

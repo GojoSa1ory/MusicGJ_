@@ -16,20 +16,16 @@ public class GetUserByUsernameInteractor
         _mapper = mapper;
     }
 
-    public Task<ServiceResponse<ResponseUserDto>> Invoke(string username)
+    public Task<ServiceResponse<ResponseUserDto, String>> Invoke(string username)
     {
-        ServiceResponse<ResponseUserDto> res = new ServiceResponse<ResponseUserDto>();
-
         try
         {
             var user = _useCase.Invoke(username: username);
-            res.Data = _mapper.Map<ResponseUserDto>(user.Result);
+            return Task.FromResult(ServiceResponse<ResponseUserDto, String>.Success(_mapper.Map<ResponseUserDto>(user.Result)));
         }
         catch (Exception e)
         {
-            res.Err = e.Message;
+            return Task.FromResult(ServiceResponse<ResponseUserDto, String>.Failure(e.Message));
         }
-        
-        return Task.FromResult(res);
     }
 }

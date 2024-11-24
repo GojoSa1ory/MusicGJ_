@@ -13,20 +13,16 @@ public class AddTrackToPlaylistInteractor
         _addTrackToPlaylistUsecase = addTrackToPlaylistUsecase;
     }
 
-    public async Task<ServiceResponse<bool>> Invoke(int trackId, int playlistId, int userId)
+    public async Task<ServiceResponse<bool, String>> Invoke(int trackId, int playlistId, int userId)
     {
-        ServiceResponse<bool> res = new();
-        
         try
         {
             var req = await _addTrackToPlaylistUsecase.Invoke(trackId: trackId, playlistId: playlistId, userId: userId);
-            res.Data = req;
+            return ServiceResponse<bool, string>.Success(req);
         }
         catch (Exception e)
         {
-            res.Err = e.Message;
+            return ServiceResponse<bool, string>.Failure(e.Message);
         }
-
-        return res;
     }
 }

@@ -18,12 +18,10 @@ public class RegisterAuthController: ControllerBase
     }
 
     [HttpPost("/api/auth/register")]
-    public async Task<ActionResult<ServiceResponse<ResponseAuthDto>>> RegisterUser(RequestRegisterAuthDto auth)
+    public async Task<ActionResult<ServiceResponse<ResponseAuthDto, String>>> RegisterUser(RequestRegisterAuthDto auth)
     {
         var res = await _registerUserInteractor.Invoke(auth);
 
-        if (!res.IsSuccess) return BadRequest(res);
-        
-        return Ok(res);
+        return res.IsSuccess ? Ok(res.DataOrNull) : BadRequest(res.DataOrNull);
     }
 }

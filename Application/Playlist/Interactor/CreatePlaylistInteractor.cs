@@ -14,21 +14,16 @@ public class CreatePlaylistInteractor
         _createPlaylistUsecase = createPlaylistUsecase;
     }
 
-    public async Task<ServiceResponse<bool>> Invoke(RequestCreatePlaylist dto, int userId)
+    public async Task<ServiceResponse<bool, String>> Invoke(RequestCreatePlaylist dto, int userId)
     {
-        ServiceResponse<bool> res = new();
-        
         try
         {
             var req = await _createPlaylistUsecase.Invoke(dto.Name, userId);
-            res.Data = req;
+            return ServiceResponse<bool, string>.Success(req);
         }
         catch (Exception e)
         {
-            res.Data = false;
-            res.Err = e.Message;
+            return ServiceResponse<bool, string>.Failure(e.Message);
         }
-
-        return res;
     }
 }

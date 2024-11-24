@@ -15,20 +15,16 @@ public class DeletePlaylistInteractor
         _mapper = mapper;
     }
 
-    public async Task<ServiceResponse<bool>> Invoke(int id, int userId)
+    public async Task<ServiceResponse<bool, String>> Invoke(int id, int userId)
     {
-        ServiceResponse<bool> res = new();
-        
         try
         {
-            var req = _deletePlaylistUsecase.Invoke(id, userId);
-            res.Data = req.Result;
+            var req = await _deletePlaylistUsecase.Invoke(id, userId);
+            return ServiceResponse<bool, string>.Success(req);
         }
         catch (Exception e)
         {
-            res.Err = e.Message;
+            return ServiceResponse<bool, string>.Failure(e.Message);
         }
-
-        return res;
     }
 }

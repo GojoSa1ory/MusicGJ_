@@ -16,12 +16,10 @@ public class FindPlaylistByNameController: ControllerBase
     }
 
     [HttpGet("/api/playlist/find/{name}")]
-    public async Task<ActionResult<ServiceResponse<List<ResponsePlaylistDto>>>> Invoke(string name)
+    public async Task<ActionResult<ServiceResponse<List<ResponsePlaylistDto>, string>>> Invoke(string name)
     {
         var res = await _playlistByNameInteractor.Invoke(name);
 
-        if(!res.IsSuccess) return BadRequest(res.Err);
-        
-        return Ok(res.Data);
+        return res.IsSuccess ? Ok(res.DataOrNull) : BadRequest(res.ErrorOrNull);
     }
 }

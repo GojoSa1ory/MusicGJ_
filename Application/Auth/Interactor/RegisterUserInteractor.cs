@@ -25,33 +25,22 @@ public class RegisterUserInteractor
         _jwtTokenGenerate = jwtTokenGenerate;
     }
 
-    public async Task<ServiceResponse<ResponseAuthDto>> Invoke(RequestRegisterAuthDto reg)
+    public async Task<ServiceResponse<ResponseAuthDto, String>> Invoke(RequestRegisterAuthDto reg)
     {
-        ServiceResponse<ResponseAuthDto> res = new();
-        
         try
         {
             var requestAuthModel = _mapper.MapRegisterRequestToDomain(reg);
 
             var responseAuthModel = await _registerUserUseCase.Invoke(requestAuthModel);
-
-            if (!responseAuthModel.IsSuccess)
-            {
-                res.Err = responseAuthModel.Err;
-                return res;
-            }
             
-            string token = _jwtTokenGenerate.GenerateToken(responseAuthModel.Data, _configuration);
-            res.Data = _mapper.MapToResponse(responseAuthModel.Data, token);
+            string token = _jwtTokenGenerate.GenerateToken(responseAuthModel.DataOrNull, _configuration);
+            return ServiceResponse<ResponseAuthDto, string>.Success(_mapper.MapToResponse(responseAuthModel.DataOrNull, token));
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            res.Err = e.Message;
-            throw;
+            return ServiceResponse<ResponseAuthDto, string>.Failure(e.Message);
         }
         
-        return res;
     }
     
 }

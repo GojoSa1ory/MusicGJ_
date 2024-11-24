@@ -15,14 +15,10 @@ public class AddTrackController: ControllerBase {
     }
 
     [HttpPost("api/track/add")]
-    public async Task<ActionResult<ServiceResponse<ResponseTrackDto>>> AddTrack([FromForm] RequestTrackDto track)
+    public async Task<ActionResult<ServiceResponse<ResponseTrackDto, string>>> AddTrack([FromForm] RequestTrackDto track)
     {
-        
-        var response = await _addInteractor.Invoke(track);
-
-        if(!response.IsSuccess) return BadRequest(response.Err);
-
-        return Ok(response.Data);
+        var res = await _addInteractor.Invoke(track);
+        return res.IsSuccess ? Ok(res.DataOrNull) : BadRequest(res.ErrorOrNull);
     }
 
 }

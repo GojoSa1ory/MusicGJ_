@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MusicG.Application.Playlist.Dto;
 using MusicG.Application.Playlist.Interactor;
+using MusicG.Presentation.Playlist.Exception;
 
 namespace MusicG.Presentation.Playlist;
 
@@ -21,10 +22,16 @@ public class CreatePlaylistController: ControllerBase
     [HttpPost("/api/create/playlist")]
     public async Task<ActionResult<bool>> Invoke(RequestCreatePlaylist dto)
     {
-        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-        var resp = await _createPlaylistInteractor.Invoke(dto, userId);
-        if (!resp.IsSuccess) return BadRequest();
-        return Ok(resp);
+        var value = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (value != null)
+        {
+            int userId = int.Parse(value);
+            var resp = await _createPlaylistInteractor.Invoke(dto, userId);
+            return resp.IsSuccess ? Ok(resp.DataOrNull) : BadRequest(resp.ErrorOrNull);
+        }
+
+        return BadRequest(new CreatePlaylistException().Message);
     }
 
 }

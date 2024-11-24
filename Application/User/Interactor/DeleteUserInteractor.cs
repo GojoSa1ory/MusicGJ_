@@ -1,5 +1,3 @@
-using AutoMapper;
-using MusicG.Application.User.DTO;
 using MusicG.Domain;
 using MusicG.Domain.User.Usecases;
 
@@ -14,19 +12,15 @@ public class DeleteUserInteractor
         _deleteUserUsecase = deleteUserUsecase;
     }
 
-    public async Task<ServiceResponse<bool>> Invoke(int id)
+    public async Task<ServiceResponse<bool, String>> Invoke(int id)
     {
-        ServiceResponse<bool> res = new ServiceResponse<bool>();
-        
         try
         {
-            res.Data = await _deleteUserUsecase.Invoke(id);;
+            return ServiceResponse<bool, String>.Success(await _deleteUserUsecase.Invoke(id));
         }
         catch (Exception e)
         {
-            res.Err = e.Message;
+            return ServiceResponse<bool, String>.Failure(e.Message);
         }
-
-        return res;
     }
 }

@@ -12,7 +12,7 @@ public class LoginUserUseCase
         _repository = repository;
     }
 
-    public Task<ServiceResponse<AuthModel>> Invoke(AuthModel authModel)
+    public Task<ServiceResponse<AuthModel, String>> Invoke(AuthModel authModel)
     {
         return _repository.LoginUser(authModel);
     }

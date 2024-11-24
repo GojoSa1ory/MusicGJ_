@@ -16,20 +16,16 @@ public class GetUserByIdInteractor
         _mapper = mapper;
     }
 
-    public async Task<ServiceResponse<ResponseUserDto>> Invoke(int id)
+    public async Task<ServiceResponse<ResponseUserDto, String>> Invoke(int id)
     {
-        ServiceResponse<ResponseUserDto> res = new();
-
         try
         {
             var req = await _useCase.Invoke(id);
-            res.Data = _mapper.Map<ResponseUserDto>(req);
+            return ServiceResponse<ResponseUserDto, string>.Success(_mapper.Map<ResponseUserDto>(req));
         }
         catch (Exception e)
         {
-            res.Err = e.Message;
+            return ServiceResponse<ResponseUserDto, string>.Failure(e.Message);
         }
-        
-        return res;
     }
 }

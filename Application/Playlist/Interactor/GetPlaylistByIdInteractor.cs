@@ -16,20 +16,16 @@ public class GetPlaylistByIdInteractor
         _mapper = mapper;
     }
 
-    public async Task<ServiceResponse<ResponsePlaylistDto>> Invoke(int id)
+    public async Task<ServiceResponse<ResponsePlaylistDto, String>> Invoke(int id)
     {
-        ServiceResponse<ResponsePlaylistDto> res = new ServiceResponse<ResponsePlaylistDto>();
-        
         try
         {
             var req = await _playlistByIdUsecase.Invoke(id);
-            res.Data = _mapper.Map<ResponsePlaylistDto>(req);
+            return ServiceResponse<ResponsePlaylistDto, string>.Success(_mapper.Map<ResponsePlaylistDto>(req));
         }
         catch (Exception e)
         {
-            res.Err = e.Message;
+            return ServiceResponse<ResponsePlaylistDto, string>.Failure(e.Message);
         }
-
-        return res;
     }
 }

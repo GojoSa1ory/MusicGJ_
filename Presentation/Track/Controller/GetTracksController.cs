@@ -18,13 +18,10 @@ public class GetTracksController: ControllerBase
 
 
     [HttpGet("/api/tracks/all")]
-    public async Task<ActionResult<ServiceResponse<List<ResponseTrackDto>>>> GetTracks()
+    public async Task<ActionResult<ServiceResponse<List<ResponseTrackDto>, string>>> GetTracks()
     {
         var res = await _tracksInteractor.Invoke();
-
-        if (!res.IsSuccess) return BadRequest(res.Err);
-
-        return Ok(res.Data);
+        return res.IsSuccess ? Ok(res.DataOrNull) : BadRequest(res.ErrorOrNull);
     }
     
 }

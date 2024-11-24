@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MusicG.Domain.Track.Models;
 using MusicG.Infrastructure.database;
@@ -12,7 +13,7 @@ public class TrackRepositoryImpl(
 {
     public async Task<TrackModel> AddTrack(TrackModelWithoutUser track)
     {
-        var user = db.Users.FirstOrDefault(u => u.Id == track.UserId);
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Id == track.UserId);
         if (user == null) throw new UserNotFoundException();
 
         var genre = db.Genres.FirstOrDefault(g => g.Id == track.GenreId);
@@ -36,12 +37,12 @@ public class TrackRepositoryImpl(
 
     public async Task<List<TrackModel>> GetTracks()
     {
-        return db.Tracks.Select(t => mapper.MapToDomain(t)).ToList();
+        return await db.Tracks.Select(t => mapper.MapToDomain(t)).ToListAsync();
     }
 
     public async Task<TrackModel> UpdateTrack(int id, TrackModel model)
     {
-        var track = db.Tracks.First(t => t.Id == id);
+        var track = await db.Tracks.FirstAsync(t => t.Id == id);
 
         Console.WriteLine(model);
 
@@ -59,7 +60,7 @@ public class TrackRepositoryImpl(
 
     public async Task<TrackModel> GetTrackById(int id)
     {
-        var track = db.Tracks.FirstOrDefault(track => track.Id == id);
+        var track = await db.Tracks.FirstOrDefaultAsync(track => track.Id == id);
 
         if (track is null)
         {
@@ -71,7 +72,11 @@ public class TrackRepositoryImpl(
 
     public async Task<List<TrackModel>> GetTrackByName(string name)
     {
-        var track = db.Tracks.Where(t => t.Name == name).Select(t => mapper.MapToDomain(t)).ToList();
+        var track = await db.Tracks
+            .Where(t => t.Name.ToLower().Contains(name.ToLower()))
+            .Select(t => mapper.MapToDomain(t))
+            .ToListAsync();
+        
         if (track.IsNullOrEmpty()) throw new TrackNotFoundException();
         return track;
     }
@@ -79,7 +84,8 @@ public class TrackRepositoryImpl(
 
     public async Task DeleteTrack(int id)
     {
-        var dbTrack = db.Tracks.FirstOrDefault(t => t.Id == id);
+        var dbTrack = await db.Tracks.FirstOrDefaultAsync(t => t.Id == id);
+        
         if (dbTrack is null)
             throw new TrackNotFoundException();
 

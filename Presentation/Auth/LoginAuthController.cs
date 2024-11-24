@@ -17,12 +17,10 @@ public class LoginAuthController: ControllerBase
     }
     
     [HttpPost("/api/auth/login")]
-    public async Task<ActionResult<ServiceResponse<ResponseAuthDto>>> LoginUser(RequestLoginAuthDto auth)
+    public async Task<ActionResult<ServiceResponse<ResponseAuthDto, String>>> LoginUser(RequestLoginAuthDto auth)
     {
         var response = await _loginUserInteractor.Invoke(auth);
 
-        if (!response.IsSuccess) return BadRequest(response.Err);
-        
-        return Ok(response.Data);
+        return response.IsSuccess ? Ok(response.DataOrNull) : BadRequest(response.ErrorOrNull);
     }
 }

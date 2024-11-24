@@ -11,20 +11,15 @@ public class GetTrackByIdInteractor {
         _mapper = mapper;
     }
 
-    public async Task<ServiceResponse<ResponseTrackDto>> Invoke(int id) {
-
-        ServiceResponse<ResponseTrackDto> resp = new();
-
+    public async Task<ServiceResponse<ResponseTrackDto, string>> Invoke(int id) {
         try
         {
             var data = await _getTrackById.Invoke(id);
-            resp.Data = _mapper.MapToResponse(data);
+            return ServiceResponse<ResponseTrackDto, string>.Success(_mapper.MapToResponse(data));
         }
         catch (Exception ex)
         {
-            resp.Err = ex.Message;
+            return ServiceResponse<ResponseTrackDto, string>.Failure(ex.Message);
         }
-        
-        return resp;
     }
 }

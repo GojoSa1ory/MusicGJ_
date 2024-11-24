@@ -20,6 +20,7 @@ static class SetupDomainDi {
         builder.Services.AddScoped<UpdateTrackUsecase>();
         builder.Services.AddScoped<DeleteTrackUsecase>();
         builder.Services.AddScoped<GetTracksUsecase>();
+        builder.Services.AddScoped<GetTrackByNameUsecase>();
         
         
         builder.Services.AddScoped<CreatePlaylistUsecase>();

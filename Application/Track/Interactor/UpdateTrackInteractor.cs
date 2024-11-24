@@ -16,9 +16,7 @@ public class UpdateTrackInteractor {
         _fileUploadUtil = fileUploadUtil;
     }
 
-    public async Task<ServiceResponse<ResponseTrackDto>> Invoke(int id, RequestUpdateTrackDto track) {
-
-        ServiceResponse<ResponseTrackDto> resp = new();
+    public async Task<ServiceResponse<ResponseTrackDto, String>> Invoke(int id, RequestUpdateTrackDto track) {
         try
         {
             var trackPath = await _fileUploadUtil.UploadFile("Track", track.Track);
@@ -30,15 +28,11 @@ public class UpdateTrackInteractor {
             doaminModel.TrackImage = imageTrackPath;
 
             var respModel = await _usecase.Invoke(id, doaminModel);
-            resp.Data = _mapper.MapToResponse(respModel);
+            return ServiceResponse<ResponseTrackDto, string>.Success(_mapper.MapToResponse(respModel));
         }
         catch (System.Exception ex)
         {
-            resp.Data = null;
-            resp.Err = ex.Message;
+            return ServiceResponse<ResponseTrackDto, string>.Failure(ex.Message);
         }
-
-        return resp;
-
     }
 }

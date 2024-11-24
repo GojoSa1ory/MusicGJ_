@@ -12,21 +12,16 @@ public class DeleteTrackInteractor
         _deleteTrackUsecase = deleteTrackUsecase;
     }
 
-    public async Task<ServiceResponse<String>> Invoke(int id)
+    public async Task<ServiceResponse<bool, String>> Invoke(int id)
     {
-        ServiceResponse<String> resp = new();
-        
         try
         {
             await _deleteTrackUsecase.Invoke(id);
-            resp.Data = "Success";
+            return ServiceResponse<bool, string>.Success(true);
         }
         catch (Exception e)
         {
-            resp.Data = null;
-            resp.Err = e.Message;
+            return ServiceResponse<bool, string>.Failure(e.Message);
         }
-
-        return resp;
     }
 }

@@ -15,20 +15,16 @@ public class GetTracksInteractor
         _mapper = mapper;
     }
 
-    public async Task<ServiceResponse<List<ResponseTrackDto>>> Invoke()
+    public async Task<ServiceResponse<List<ResponseTrackDto>, String>> Invoke()
     {
-        ServiceResponse < List < ResponseTrackDto >> resp = new();
-        
         try
         {
             List<TrackModel> tracks = await _usecase.Invoke();
-            resp.Data = tracks.Select(t => _mapper.MapToResponse(t)).ToList();
+            return ServiceResponse<List<ResponseTrackDto>, string>.Success(tracks.Select(t => _mapper.MapToResponse(t)).ToList());
         }
         catch (Exception e)
         {
-            resp.Err = e.Message;
+            return ServiceResponse<List<ResponseTrackDto>, string>.Failure(e.Message);
         }
-
-        return resp;
     }
 }

@@ -11,11 +11,9 @@ public class GetTrackByIdController: ControllerBase {
     }
 
     [HttpPost("api/track/get")]
-    public async Task<ActionResult<ServiceResponse<ResponseTrackDto>>> GetTrackById(int id) {
+    public async Task<ActionResult<ServiceResponse<ResponseTrackDto, string>>> GetTrackById(int id) {
         var res = await _interactor.Invoke(id);
 
-        if(!res.IsSuccess) return BadRequest(res.Err);
-
-        return Ok(res.Data);
+        return res.IsSuccess ? Ok(res.DataOrNull) : BadRequest(res.ErrorOrNull);
     }
 }

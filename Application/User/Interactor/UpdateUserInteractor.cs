@@ -17,20 +17,18 @@ public class UpdateUserInteractor
         _mapper = mapper;
     }
 
-    public async Task<ServiceResponse<bool>> Invoke(RequestUpdateUserDto dto, int id)
+    public async Task<ServiceResponse<bool, String>> Invoke(RequestUpdateUserDto dto, int id)
     {
-        ServiceResponse<bool> res = new();
 
         try
         {
             var userToUpdateModel = _mapper.Map<UserToUpdateModel>(dto);
-            res.Data = await _updateUserUsecase.Invoke(userToUpdateModel, id);
+            return ServiceResponse<bool, string>.Success(await _updateUserUsecase.Invoke(userToUpdateModel, id));
         }
         catch (Exception e)
         {
-            res.Err = e.Message;
+            return ServiceResponse<bool, string>.Failure(e.Message);
         }
         
-        return res;
     }
 }

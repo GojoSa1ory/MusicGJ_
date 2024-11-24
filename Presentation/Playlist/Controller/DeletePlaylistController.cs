@@ -1,7 +1,9 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MusicG.Application.Playlist.Interactor;
 using MusicG.Domain;
+using MusicG.Presentation.Playlist.Exception;
 
 namespace MusicG.Presentation.Playlist;
 
@@ -17,13 +19,17 @@ public class DeletePlaylistController: ControllerBase
     }
 
     [HttpDelete("/api/playlist/delete/{id}")]
-    public async Task<ActionResult<ServiceResponse<bool>>> Invoke(int id)
+    public async Task<ActionResult<ServiceResponse<bool, String>>> Invoke(int id)
     {
-        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-        var res = await _deletePlaylistInteractor.Invoke(id, userId);
+        var value = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        if (!res.IsSuccess) return BadRequest(res.Err);
+        if (value != null)
+        {
+            int userId = int.Parse(value);
+            var res = await _deletePlaylistInteractor.Invoke(id, userId);
+            return res.IsSuccess ? Ok(res.DataOrNull) : BadRequest(res.ErrorOrNull);
+        }
 
-        return Ok(res.Data);
+        return BadRequest(new DeletePlaylistException().Message);
     }
 }

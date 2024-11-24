@@ -12,7 +12,7 @@ public class RegisterUserUseCase
         _rep = rep;
     }
 
-    public Task<ServiceResponse<AuthModel>> Invoke(AuthModel reg)
+    public Task<ServiceResponse<AuthModel, String>> Invoke(AuthModel reg)
     {
         return _rep.RegisterUser(reg);
     }
