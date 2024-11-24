@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:music_g/core/shared/shared.dart' show LoadingView;
+import 'package:music_g/app/state/audio_player_state.dart';
+import 'package:music_g/core/shared/shared.dart' show LoadingView, TrackCard;
 import 'package:music_g/feature/track/screen/main/bloc/track_bloc.dart';
 
 class TrackView extends StatefulWidget {
@@ -28,6 +29,8 @@ class _TrackViewState extends State<TrackView> {
 
   @override
   Widget build(BuildContext context) {
+    final playerState = context.watch<AudioPlayerState>();
+
     return BlocBuilder<TrackBloc, TrackState>(
         bloc: _bloc,
         builder: (context, state) {
@@ -36,17 +39,18 @@ class _TrackViewState extends State<TrackView> {
                   body: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: ListView.builder(
-                        itemCount: state.tracks.length,
-                        itemBuilder: (context, index) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.network(state.tracks[index].trackImage, width: 120, height: 100),
-                              const SizedBox(width: 10),
-                              Text(state.tracks[index].name)
-                            ],
-                          );
-                        },
+                      itemCount: state.tracks.length,
+                      itemBuilder: (context, index) {
+                        return TrackCard(
+                            togglePlayPause: () {
+                              playerState
+                                  .togglePlayPause(state.tracks[index].track);
+                            },
+                            coverUrl: state.tracks[index].trackImage,
+                            trackName: state.tracks[index].name,
+                            isPlaying: playerState.isPlaying,
+                            artistName: "Artist");
+                      },
                     ),
                   ),
                 )

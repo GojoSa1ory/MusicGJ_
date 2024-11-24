@@ -22,8 +22,6 @@ class RegisterUserRequest {
           data: auth.toJson()
       );
 
-      print(req.data['data'].toString());
-
       return Result.success(ResponseAuthDto.fromJson(req.data as Map<String, dynamic>));
     } on DioException catch(e) {
 

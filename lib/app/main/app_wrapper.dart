@@ -11,25 +11,25 @@ class AppWrapper extends StatefulWidget {
 }
 
 class _AppWrapperState extends State<AppWrapper> {
-  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: widget.navigationShell,
       bottomNavigationBar: BottomNavigationBar(
-          onTap: (index) => setState(() {
-                _currentIndex = index;
-              }),
-          currentIndex: _currentIndex,
+          onTap: (index) => widget.navigationShell.goBranch(
+            index,
+            initialLocation: index == widget.navigationShell.currentIndex,
+          ),
+          currentIndex: widget.navigationShell.currentIndex,
           items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.home_filled),
                 label: "Home"
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: "Settings"
+                icon: Icon(Icons.account_circle_outlined),
+                label: "Account"
             ),
           ]),
     );

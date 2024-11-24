@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:music_g/app/navigation/router.dart';
+import 'package:music_g/app/state/audio_player_state.dart';
 import 'package:music_g/app/state/app_theme_state.dart';
 import 'package:music_g/app/state/user_state.dart';
 import 'package:music_g/core/api/api.dart' show setupApiDi;
@@ -35,7 +36,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserState()),
-        ChangeNotifierProvider(create: (_) => AppThemeState())
+        ChangeNotifierProvider(create: (_) => AppThemeState()),
+        ChangeNotifierProvider(create: (_) => AudioPlayerState())
       ],
       child: const MyApp(),
     )

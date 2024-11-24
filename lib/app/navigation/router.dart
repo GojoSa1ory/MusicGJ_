@@ -11,8 +11,8 @@ class AppRouter {
       GlobalKey<NavigatorState>(debugLabel: "root");
   static final _trackNavigatorKey =
       GlobalKey<NavigatorState>(debugLabel: "track");
-  // static final _userNavigatorKey =
-  //     GlobalKey<NavigatorState>(debugLabel: "track");
+  static final _userNavigatorKey =
+      GlobalKey<NavigatorState>(debugLabel: "user");
 
   static GoRouter router(bool isAuth) {
 
@@ -51,6 +51,17 @@ class AppRouter {
                       builder: (context, state) => const TrackPage(),
                     )
                   ]
+                ),
+
+                StatefulShellBranch(
+                    navigatorKey: _userNavigatorKey,
+                    routes: [
+                      GoRoute(
+                        path: AppRoutes.user.getRoute(),
+                        name: AppRoutes.user.getRouteName(),
+                        builder: (context, state) => const Text("Hello"),
+                      )
+                    ]
                 ),
 
                 

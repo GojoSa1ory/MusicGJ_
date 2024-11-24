@@ -23,9 +23,7 @@ class LoginUserRequests {
           data: auth.toJson()
       );
 
-      final Map<String, dynamic> data = req.data['data'];
-
-      print(data);
+      final Map<String, dynamic> data = req.data;
 
       return Result.success(ResponseAuthDto.fromJson(data));
     } on DioException catch(e) {
@@ -35,8 +33,6 @@ class LoginUserRequests {
       } else if(e.response?.statusCode == 500) {
         return Result.failure(NetworkError.SERVER_ERROR.name);
       } else {
-        print(e.error.toString());
-        print(e.message);
         return Result.failure(NetworkError.UNKNOW_ERROR.name);
       }
     } catch (e) {
