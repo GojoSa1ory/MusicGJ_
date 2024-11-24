@@ -42,7 +42,7 @@ public class TrackRepositoryImpl(
 
     public async Task<TrackModel> UpdateTrack(int id, TrackModel model)
     {
-        var track = await db.Tracks.FirstAsync(t => t.Id == id);
+        var track = await db.Tracks.FirstOrDefaultAsync(t => t.Id == id);
 
         Console.WriteLine(model);
 

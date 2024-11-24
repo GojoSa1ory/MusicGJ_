@@ -23,7 +23,7 @@ public class PlaylistRepositoryImpl: IPlaylistRepository
 
     public async Task<bool> CreatePlaylist(string name, int userId)
     {
-        var user = _database.Users.FirstOrDefault(u => u.Id == userId);
+        var user = await _database.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (user is null) throw new UserNotFoundException();
         PlaylistEntity playlistEntity = new PlaylistEntity
         {
@@ -34,7 +34,7 @@ public class PlaylistRepositoryImpl: IPlaylistRepository
             Name = name
         };
 
-        _database.Playlist.Add(playlistEntity);
+        await _database.Playlist.AddAsync(playlistEntity);
         await _database.SaveChangesAsync();
 
         return true;
@@ -42,7 +42,7 @@ public class PlaylistRepositoryImpl: IPlaylistRepository
 
     public async Task<bool> DeletePlaylist(int id, int userId)
     {
-        var playlist = _database.Playlist.FirstOrDefault(p => p.Id == id && p.User.Id == userId);
+        var playlist = await _database.Playlist.FirstOrDefaultAsync(p => p.Id == id && p.User.Id == userId);
         if (playlist is null) throw new System.Exception("Not found");
         _database.Playlist.Remove(playlist);
         await _database.SaveChangesAsync();
@@ -51,10 +51,10 @@ public class PlaylistRepositoryImpl: IPlaylistRepository
 
     public async Task<bool> AddTrackToPlaylist(int trackId, int playlistId, int userId)
     {
-        var track = _database.Tracks
+        var track = await _database.Tracks
             .Include(t => t.Genre)
             .Include(t => t.User)
-            .FirstOrDefault(t => t.Id == trackId);
+            .FirstOrDefaultAsync(t => t.Id == trackId);
 
         if (track is null) throw new TrackNotFoundException();
         
@@ -73,10 +73,10 @@ public class PlaylistRepositoryImpl: IPlaylistRepository
 
     public async Task<bool> DeleteTrackFromPlaylist(int trackId, int playlistId, int userId)
     {
-        var track = _database.Tracks
+        var track = await _database.Tracks
             .Include(t => t.Genre)
             .Include(t => t.User)
-            .FirstOrDefault(t => t.Id == trackId);
+            .FirstOrDefaultAsync(t => t.Id == trackId);
 
         if (track is null) throw new TrackNotFoundException();
         
@@ -98,11 +98,11 @@ public class PlaylistRepositoryImpl: IPlaylistRepository
 
     public async Task<PlaylistModel> GetPlaylistById(int id)
     {
-        var playlist = _database.Playlist
+        var playlist = await _database.Playlist
             .Include(p => p.Tracks)!
                 .ThenInclude(t => t.Genre)
             .Include(p => p.User)
-            .FirstOrDefault(p => p.Id == id);
+            .FirstOrDefaultAsync(p => p.Id == id);
         if (playlist is null) throw new PlaylistNotFound();
 
         return _mapper.Map<PlaylistModel>(playlist);
@@ -110,22 +110,24 @@ public class PlaylistRepositoryImpl: IPlaylistRepository
 
     public async Task<List<PlaylistModel>> GetUserPlaylist(int userId)
     {
-        var playlists = _database.Playlist
+        var playlists = await _database.Playlist
             .Include(p => p.Tracks)
                 .ThenInclude(t => t.Genre)
             .Include(p => p.User)
-            .Where(p => p.User.Id == userId).ToList();
+            .Where(p => p.User.Id == userId).ToListAsync();
         if (playlists.IsNullOrEmpty()) throw new System.Exception("Not found");
+        
         return playlists.Select(p => _mapper.Map<PlaylistModel>(p)).ToList();
     }
 
     public async Task<List<PlaylistModel>> FindPlaylistByName(string name)
     {
-        var playlist = _database.Playlist
+        var playlist = await _database.Playlist
             .Include(p => p.Tracks)!
             .ThenInclude(t => t.Genre)
             .Include(p => p.User)
-            .Where(p => p.Name.ToLower().Contains(name));
+            .Where(p => p.Name.ToLower().Contains(name))
+            .ToListAsync();
         
         if (playlist.IsNullOrEmpty()) throw new PlaylistNotFound();
 

@@ -1,5 +1,5 @@
 using AutoMapper;
-using MusicG.Domain;
+using Microsoft.EntityFrameworkCore;
 using MusicG.Domain.User;
 using MusicG.Domain.User.Repository;
 using MusicG.Infrastructure.database;
@@ -18,27 +18,27 @@ public class UserRepositoryImpl : IUserRepository
         _mapper = mapper;
     }
 
-    public Task<UserModel> GetUserByUsername(string username)
+    public async Task<UserModel> GetUserByUsername(string username)
     {
-        var user = _dao.Users.FirstOrDefault(u => u.Username.ToLower().Contains(username.ToLower()));
+        var user = await _dao.Users.FirstOrDefaultAsync(u => u.Username.ToLower().Contains(username.ToLower()));
 
         if (user is null) throw new UserNotFoundException();
 
-        return Task.FromResult(_mapper.Map<UserModel>(user));
+        return _mapper.Map<UserModel>(user);
     }
 
-    public Task<UserModel> GetUserById(int id)
+    public async Task<UserModel> GetUserById(int id)
     {
-        var user = _dao.Users.FirstOrDefault(u => u.Id == id);
+        var user = await _dao.Users.FirstOrDefaultAsync(u => u.Id == id);
 
         if (user is null) throw new UserNotFoundException();
         
-        return Task.FromResult(_mapper.Map<UserModel>(user));
+        return _mapper.Map<UserModel>(user);
     }
 
     public async Task<bool> UpdateUser(UserToUpdateModel user, int userId)
     {
-        var userFromBase = _dao.Users.FirstOrDefault(u => u.Id == userId);
+        var userFromBase = await _dao.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (userFromBase is null) throw new UserNotFoundException();
 
         userFromBase.Username = (user.Username == userFromBase.Username ? userFromBase.Username : user.Username) ??
@@ -57,7 +57,7 @@ public class UserRepositoryImpl : IUserRepository
 
     public async Task<bool> DeleteUser(int id)
     {
-        var userFromBase = _dao.Users.FirstOrDefault(u => u.Id == id);
+        var userFromBase = await _dao.Users.FirstOrDefaultAsync(u => u.Id == id);
         if (userFromBase is null) throw new UserNotFoundException();
 
         _dao.Users.Remove(userFromBase);
